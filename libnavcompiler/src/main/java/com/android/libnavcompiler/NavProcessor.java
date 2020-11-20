@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -36,9 +37,9 @@ import javax.tools.StandardLocation;
         "com.android.libnavannotation.FragmentDestination"
 })
 public class NavProcessor extends AbstractProcessor {
+    private static final String OUTPUT_FILE_NAME = "destination.json";
     private Messager messager;
     private Filer filer;
-    private static final String OUTPUT_FILE_NAME = "destination.json";
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -95,7 +96,7 @@ public class NavProcessor extends AbstractProcessor {
                 //利用fastjson把收集到的所有的页面信息 转换成JSON格式的。并输出到文件中
                 String content = JSON.toJSONString(destMap);
                 fos = new FileOutputStream(outPutFile);
-                writer = new OutputStreamWriter(fos, "UTF-8");
+                writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
                 writer.write(content);
                 writer.flush();
 
@@ -158,6 +159,7 @@ public class NavProcessor extends AbstractProcessor {
 
             if (destMap.containsKey(pageUrl)) {
                 messager.printMessage(Diagnostic.Kind.ERROR, "不同的页面不允许使用相同的pageUrl:" + className);
+            } else {
                 JSONObject object = new JSONObject();
                 object.put("id", id);
                 object.put("pageUrl", pageUrl);

@@ -1,0 +1,42 @@
+{
+  "main/tabs/sofa": {
+    "isFragment": true,
+    "asStarter": false,
+    "needLogin": false,
+    "pageUrl": "main/tabs/sofa",
+    "className": "com.android.jetpack.ui.sofa.SofaFragment",
+    "id": 143481108
+  },
+  "main/tabs/home": {
+    "isFragment": true,
+    "asStarter": true,
+    "needLogin": false,
+    "pageUrl": "main/tabs/home",
+    "className": "com.android.jetpack.ui.home.HomeFragment",
+    "id": 655287276
+  },
+  "main/tabs/publish": {
+    "isFragment": false,
+    "asStarter": false,
+    "needLogin": false,
+    "pageUrl": "main/tabs/publish",
+    "className": "com.android.jetpack.ui.publish.PublishActivity",
+    "id": 833036941
+  },
+  "main/tabs/find": {
+    "isFragment": true,
+    "asStarter": false,
+    "needLogin": false,
+    "pageUrl": "main/tabs/find",
+    "className": "com.android.jetpack.ui.find.FindFragment",
+    "id": 2020402132
+  },
+  "main/tabs/my": {
+    "isFragment": true,
+    "asStarter": false,
+    "needLogin": false,
+    "pageUrl": "main/tabs/my",
+    "className": "com.android.jetpack.ui.my.MyFragment",
+    "id": 1975864436
+  }
+}

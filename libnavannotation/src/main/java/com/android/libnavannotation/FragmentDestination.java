@@ -5,9 +5,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 public @interface FragmentDestination {
-  String pageUrl();
+    String pageUrl();
 
-  boolean needLogin() default false;
+    boolean needLogin() default false;
 
-  boolean asStarter() default false;
+    boolean asStarter() default false;
 }
