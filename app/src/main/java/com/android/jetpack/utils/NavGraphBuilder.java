@@ -12,10 +12,13 @@ import androidx.navigation.fragment.FragmentNavigator;
 
 import com.android.jetpack.model.Destination;
 import com.android.jetpack.navigator.FixFragmentNavigator;
+import com.android.libcommon.global.AppGlobals;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
+/**
+ * 自定义页面路由结构图
+ */
 public class NavGraphBuilder {
     public static void build(FragmentActivity activity, NavController controller, int containerId) {
         NavigatorProvider provider = controller.getNavigatorProvider();
@@ -30,9 +33,7 @@ public class NavGraphBuilder {
         provider.addNavigator(fragmentNavigator);
         ActivityNavigator activityNavigator = provider.getNavigator(ActivityNavigator.class);
         HashMap<String, Destination> destConfig = AppConfig.getDestConfig();
-        Iterator<Destination> iterator = destConfig.values().iterator();
-        while (iterator.hasNext()) {
-            Destination node = iterator.next();
+        for (Destination node : destConfig.values()) {
             if (node.isFragment) {
                 FragmentNavigator.Destination destination = fragmentNavigator.createDestination();
                 destination.setId(node.id);

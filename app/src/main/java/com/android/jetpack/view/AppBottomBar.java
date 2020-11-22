@@ -1,4 +1,4 @@
-package com.android.jetpack.ui.view;
+package com.android.jetpack.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,6 +22,9 @@ import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 
 import java.util.List;
 
+/**
+ * 可配置化底部导航栏view
+ */
 public class AppBottomBar extends BottomNavigationView {
     private static final int[] sIcons = new int[]{R.mipmap.icon_tab_home, R.mipmap.icon_tab_sofa, R.mipmap.icon_tab_publish, R.mipmap.icon_tab_home, R.mipmap.icon_tab_find, R.mipmap.icon_tab_mine};
 
@@ -48,26 +51,69 @@ public class AppBottomBar extends BottomNavigationView {
 
         setItemIconTintList(colorStateList);
         setItemTextColor(colorStateList);
+        //LABEL_VISIBILITY_LABELED:设置按钮的文本为一直显示模式
+        //LABEL_VISIBILITY_AUTO:当按钮个数小于三个时一直显示，或者当按钮个数大于3个且小于5个时，被选中的那个按钮文本才会显示
+        //LABEL_VISIBILITY_SELECTED：只有被选中的那个按钮的文本才会显示
+        //LABEL_VISIBILITY_UNLABELED:所有的按钮文本都不显示
         setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
         setSelectedItemId(bottomBar.selectTab);
 
         for (BottomBar.Tabs tab : tabs) {
-            if (!tab.enable) return;
+            if (!tab.enable) continue;
             int id = getId(tab.pageUrl);
-            if (id < 0) return;
+            if (id < 0) continue;
             MenuItem item = getMenu().add(0, id, tab.index, tab.title);
             item.setIcon(sIcons[tab.index]);
         }
 
+        //此处给按钮icon设置大小
+        int index = 0;
         for (BottomBar.Tabs tab : tabs) {
+            if (!tab.enable) continue;
+            int id = getId(tab.pageUrl);
+            if (id < 0) continue;
+
             int iconSize = dp2px(tab.size);
             BottomNavigationMenuView menuView = (BottomNavigationMenuView) getChildAt(0);
-            BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(tab.index);
+            BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(index);
             itemView.setIconSize(iconSize);
 
             if (TextUtils.isEmpty(tab.title)) {
+                int tintColor = 0;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    tintColor = TextUtils.isEmpty(tab.tintColor)
+                            ? getResources().getColor(R.color.tabs_publish_color, null) : Color.parseColor(tab.tintColor);
+                } else {
+                    tintColor = TextUtils.isEmpty(tab.tintColor)
+                            ? getResources().getColor(R.color.tabs_publish_color) : Color.parseColor(tab.tintColor);
+                }
+
                 itemView.setIconTintList(ColorStateList.valueOf(Color.parseColor(tab.tintColor)));
+                //禁止掉点按时 上下浮动的效果
                 itemView.setShifting(false);
+
+                /*
+                 * 如果想要禁止掉所有按钮的点击浮动效果。
+                 * 那么还需要给选中和未选中的按钮配置一样大小的字号。
+                 *
+                 *  在MainActivity布局的AppBottomBar标签增加如下配置，
+                 *  @style/active，@style/inActive 在style.xml中
+                 *  app:itemTextAppearanceActive="@style/active"
+                 *  app:itemTextAppearanceInactive="@style/inActive"
+                 */
+            }
+            index++;
+        }
+
+        //底部导航栏默认选中项
+        if (bottomBar.selectTab != 0) {
+            BottomBar.Tabs selectTab = tabs.get(bottomBar.selectTab);
+            if (selectTab.enable) {
+                int itemId = getId(selectTab.pageUrl);
+                //这里需要延迟一下 再定位到默认选中的tab
+                //因为 咱们需要等待内容区域,也就NavGraphBuilder解析数据并初始化完成，
+                //否则会出现 底部按钮切换过去了，但内容区域还没切换过去
+                post(() -> setSelectedItemId(itemId));
             }
         }
     }

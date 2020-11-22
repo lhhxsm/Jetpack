@@ -34,6 +34,9 @@ android {
 
 dependencies {
     api fileTree(dir: 'lib', include: ['*.jar'])
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     //兼容包
     api 'androidx.appcompat:appcompat:1.2.0'
     //material组件
@@ -47,7 +50,51 @@ dependencies {
     api 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     //注解使用生命周期编译器
     annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.3.0-beta01'
-    testImplementation 'junit:junit:4.13.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //paging分页组件
+    api 'androidx.paging:paging-runtime:2.1.2'
+
+    //页面刷新组件
+    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
+    api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0'
+
+    //viewpager2 可以禁止预加载
+    api "androidx.viewpager2:viewpager2:1.1.0-alpha01"
+
+    //视频播放组件
+    api 'com.google.android.exoplayer:exoplayer-core:2.11.4'
+    api 'com.google.android.exoplayer:exoplayer-dash:2.11.4'
+    api 'com.google.android.exoplayer:exoplayer-ui:2.11.4'
+
+
+    //room数据库
+    api 'android.arch.persistence.room:runtime:1.1.1'
+    api "android.arch.lifecycle:extensions:1.1.1"
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
+
+
+    //图片加载
+    api 'com.github.bumptech.glide:glide:4.9.0'
+    api 'jp.wasabeef:glide-transformations:4.0.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
+    //camera
+    api 'androidx.camera:camera-core:1.0.0-beta12'
+    api 'androidx.camera:camera-camera2:1.0.0-beta12'
+    api 'androidx.camera:camera-view:1.0.0-alpha19'
+    api 'androidx.camera:camera-extensions:1.0.0-alpha19'
+
+    //workmanager
+    api 'androidx.work:work-runtime:2.4.0'
+
+    //gesture imageview
+//    api 'com.github.chrisbanes:PhotoView:2.3.0@aar'
+
+    //aliyun oss
+    api 'com.aliyun.dpa:oss-android-sdk:+'
+
+    //fastjson解析
+    api 'com.alibaba:fastjson:1.2.75'
+
 }

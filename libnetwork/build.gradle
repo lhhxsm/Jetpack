@@ -14,6 +14,15 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"]
+            }
+        }
     }
 
     buildTypes {
@@ -33,7 +42,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation project(path: ':libcommon')
+    compileOnly project(path: ':libcommon')
     implementation 'com.squareup.okhttp3:okhttp:4.10.0-RC1'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0-RC1'
     api 'android.arch.persistence.room:runtime:1.1.1'
