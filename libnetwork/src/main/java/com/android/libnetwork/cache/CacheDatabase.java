@@ -14,6 +14,15 @@ import com.android.libcommon.global.AppGlobals;
 //@TypeConverters(DateConverter.class)
 public abstract class CacheDatabase extends RoomDatabase {
     private static final CacheDatabase database;
+    static Migration sMigration = new Migration(1, 3) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            //表重命名
+            database.execSQL("alter table teacher rename to student");
+            //表添加列
+            database.execSQL("alter table teacher add column teacher_age INTEGER NOT NULL default 0");
+        }
+    };
 
     static {
         //创建一个内存数据库
@@ -38,19 +47,9 @@ public abstract class CacheDatabase extends RoomDatabase {
 
     }
 
-    public abstract CacheDao getCache();
-
     public static CacheDatabase get() {
         return database;
     }
 
-    static Migration sMigration = new Migration(1, 3) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            //表重命名
-            database.execSQL("alter table teacher rename to student");
-            //表添加列
-            database.execSQL("alter table teacher add column teacher_age INTEGER NOT NULL default 0");
-        }
-    };
+    public abstract CacheDao getCache();
 }

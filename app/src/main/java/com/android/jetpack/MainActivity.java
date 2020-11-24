@@ -2,7 +2,6 @@ package com.android.jetpack;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -16,12 +15,7 @@ import com.android.jetpack.utils.AppConfig;
 import com.android.jetpack.utils.NavGraphBuilder;
 import com.android.jetpack.view.AppBottomBar;
 import com.android.libcommon.utils.StatusBar;
-import com.android.libnetwork.ApiResponse;
-import com.android.libnetwork.GetRequest;
-import com.android.libnetwork.JsonCallback;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -61,15 +55,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         navView.setOnNavigationItemSelectedListener(this);
 
-        GetRequest<JSONObject> request = new GetRequest<>("www.mooc.com");
-        request.execute();
-        request.execute(new JsonCallback<JSONObject>() {
-            @Override
-            public void onSuccess(ApiResponse<JSONObject> response) {
-                super.onSuccess(response);
-                Log.e("tag", response.message);
-            }
-        });
+//        GetRequest<JSONObject> request = new GetRequest<>("www.mooc.com");
+//        request.execute();
+//        request.execute(new JsonCallback<JSONObject>() {
+//            @Override
+//            public void onSuccess(ApiResponse<JSONObject> response) {
+//                super.onSuccess(response);
+//                Log.e("tag", response.message);
+//            }
+//        });
 
     }
 

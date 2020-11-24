@@ -6,10 +6,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.android.jetpack.R;
 import com.android.jetpack.model.BottomBar;
@@ -26,69 +24,66 @@ import java.util.List;
  * 可配置化底部导航栏view
  */
 public class AppBottomBar extends BottomNavigationView {
-    private static final int[] sIcons = new int[]{R.mipmap.icon_tab_home, R.mipmap.icon_tab_sofa, R.mipmap.icon_tab_publish, R.mipmap.icon_tab_home, R.mipmap.icon_tab_find, R.mipmap.icon_tab_mine};
+    private static final int[] sIcons = new int[]{R.drawable.icon_tab_home, R.drawable.icon_tab_sofa, R.drawable.icon_tab_publish, R.drawable.icon_tab_find, R.drawable.icon_tab_mine};
 
-    public AppBottomBar(@NonNull Context context) {
+    public AppBottomBar(Context context) {
         this(context, null);
     }
 
-    public AppBottomBar(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public AppBottomBar(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
     @SuppressLint("RestrictedApi")
-    public AppBottomBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public AppBottomBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        BottomBar bottomBar = AppConfig.getBottomBar();
-        List<BottomBar.Tabs> tabs = bottomBar.tabs;
 
-        int[][] states = new int[2][];
-        states[0] = new int[]{android.R.attr.state_selected};
-        states[1] = new int[]{};
+        final BottomBar config = AppConfig.getBottomBar();
 
-        int[] colors = new int[]{Color.parseColor(bottomBar.activeColor), Color.parseColor(bottomBar.inActiveColor)};
-        ColorStateList colorStateList = new ColorStateList(states, colors);
-
-        setItemIconTintList(colorStateList);
-        setItemTextColor(colorStateList);
+        int[][] state = new int[2][];
+        state[0] = new int[]{android.R.attr.state_selected};
+        state[1] = new int[]{};
+        int[] colors = new int[]{Color.parseColor(config.activeColor), Color.parseColor(config.inActiveColor)};
+        ColorStateList stateList = new ColorStateList(state, colors);
+        setItemTextColor(stateList);
+        setItemIconTintList(stateList);
         //LABEL_VISIBILITY_LABELED:设置按钮的文本为一直显示模式
         //LABEL_VISIBILITY_AUTO:当按钮个数小于三个时一直显示，或者当按钮个数大于3个且小于5个时，被选中的那个按钮文本才会显示
         //LABEL_VISIBILITY_SELECTED：只有被选中的那个按钮的文本才会显示
         //LABEL_VISIBILITY_UNLABELED:所有的按钮文本都不显示
         setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
-        setSelectedItemId(bottomBar.selectTab);
-
+        List<BottomBar.Tabs> tabs = config.tabs;
         for (BottomBar.Tabs tab : tabs) {
-            if (!tab.enable) continue;
-            int id = getId(tab.pageUrl);
-            if (id < 0) continue;
-            MenuItem item = getMenu().add(0, id, tab.index, tab.title);
-            item.setIcon(sIcons[tab.index]);
+            if (!tab.enable) {
+                continue;
+            }
+            int itemId = getItemId(tab.pageUrl);
+            if (itemId < 0) {
+                continue;
+            }
+            MenuItem menuItem = getMenu().add(0, itemId, tab.index, tab.title);
+            menuItem.setIcon(sIcons[tab.index]);
         }
 
         //此处给按钮icon设置大小
         int index = 0;
-        for (BottomBar.Tabs tab : tabs) {
-            if (!tab.enable) continue;
-            int id = getId(tab.pageUrl);
-            if (id < 0) continue;
+        for (BottomBar.Tabs tab : config.tabs) {
+            if (!tab.enable) {
+                continue;
+            }
+
+            int itemId = getItemId(tab.pageUrl);
+            if (itemId < 0) {
+                continue;
+            }
 
             int iconSize = dp2px(tab.size);
             BottomNavigationMenuView menuView = (BottomNavigationMenuView) getChildAt(0);
             BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(index);
             itemView.setIconSize(iconSize);
-
             if (TextUtils.isEmpty(tab.title)) {
-                int tintColor = 0;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    tintColor = TextUtils.isEmpty(tab.tintColor)
-                            ? getResources().getColor(R.color.tabs_publish_color, null) : Color.parseColor(tab.tintColor);
-                } else {
-                    tintColor = TextUtils.isEmpty(tab.tintColor)
-                            ? getResources().getColor(R.color.tabs_publish_color) : Color.parseColor(tab.tintColor);
-                }
-
-                itemView.setIconTintList(ColorStateList.valueOf(Color.parseColor(tab.tintColor)));
+                int tintColor = TextUtils.isEmpty(tab.tintColor) ? Color.parseColor("#ff678f") : Color.parseColor(tab.tintColor);
+                itemView.setIconTintList(ColorStateList.valueOf(tintColor));
                 //禁止掉点按时 上下浮动的效果
                 itemView.setShifting(false);
 
@@ -106,10 +101,10 @@ public class AppBottomBar extends BottomNavigationView {
         }
 
         //底部导航栏默认选中项
-        if (bottomBar.selectTab != 0) {
-            BottomBar.Tabs selectTab = tabs.get(bottomBar.selectTab);
+        if (config.selectTab != 0) {
+            BottomBar.Tabs selectTab = config.tabs.get(config.selectTab);
             if (selectTab.enable) {
-                int itemId = getId(selectTab.pageUrl);
+                int itemId = getItemId(selectTab.pageUrl);
                 //这里需要延迟一下 再定位到默认选中的tab
                 //因为 咱们需要等待内容区域,也就NavGraphBuilder解析数据并初始化完成，
                 //否则会出现 底部按钮切换过去了，但内容区域还没切换过去
@@ -118,14 +113,15 @@ public class AppBottomBar extends BottomNavigationView {
         }
     }
 
-    private int getId(String pageUrl) {
-        Destination destination = AppConfig.getDestConfig().get(pageUrl);
-        if (destination == null) return -1;
-        return destination.id;
+    private int dp2px(int dpValue) {
+        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+        return (int) (metrics.density * dpValue + 0.5f);
     }
 
-    private int dp2px(int size) {
-        float value = getContext().getResources().getDisplayMetrics().density * size + 0.5f;
-        return (int) value;
+    private int getItemId(String pageUrl) {
+        Destination destination = AppConfig.getDestConfig().get(pageUrl);
+        if (destination == null)
+            return -1;
+        return destination.id;
     }
 }

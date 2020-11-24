@@ -59,6 +59,15 @@ public class AppConfig {
         return sSofaTab;
     }
 
+    public static SofaTab getFindTab() {
+        if (sFindTabConfig == null) {
+            String content = parseFile("find_tabs_config.json");
+            sFindTabConfig = JSON.parseObject(content, SofaTab.class);
+            Collections.sort(sFindTabConfig.tabs, (o1, o2) -> Integer.compare(o1.index, o2.index));
+        }
+        return sFindTabConfig;
+    }
+
     private static String parseFile(String fileName) {
         AssetManager assets = AppGlobals.getApplication().getAssets();
         InputStream is = null;

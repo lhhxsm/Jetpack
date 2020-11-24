@@ -27,8 +27,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    buildFeatures {
-        dataBinding = true
+    dataBinding {
+        enabled = true
     }
 }
 
@@ -41,6 +41,7 @@ dependencies {
     api 'androidx.appcompat:appcompat:1.2.0'
     //material组件
     api 'com.google.android.material:material:1.2.1'
+    api 'androidx.recyclerview:recyclerview:1.2.0-alpha06'
     //约束布局
     api 'androidx.constraintlayout:constraintlayout:2.1.0-alpha1'
     //navigation导航
@@ -75,9 +76,9 @@ dependencies {
 
 
     //图片加载
-    api 'com.github.bumptech.glide:glide:4.9.0'
+    api 'com.github.bumptech.glide:glide:4.11.0'
     api 'jp.wasabeef:glide-transformations:4.0.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     //camera
     api 'androidx.camera:camera-core:1.0.0-beta12'
@@ -89,7 +90,7 @@ dependencies {
     api 'androidx.work:work-runtime:2.4.0'
 
     //gesture imageview
-//    api 'com.github.chrisbanes:PhotoView:2.3.0@aar'
+    api 'com.github.chrisbanes:PhotoView:2.3.0@aar'
 
     //aliyun oss
     api 'com.aliyun.dpa:oss-android-sdk:+'

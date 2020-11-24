@@ -30,6 +30,15 @@ import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 
+/**
+ * APP页面导航信息收集注解处理器
+ * <p>
+ * AutoService注解：就这么一标记，annotationProcessor  project()应用一下,编译时就能自动执行该类了。
+ * <p>
+ * SupportedSourceVersion注解:声明我们所支持的jdk版本
+ * <p>
+ * SupportedAnnotationTypes:声明该注解处理器想要处理那些注解
+ */
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes({

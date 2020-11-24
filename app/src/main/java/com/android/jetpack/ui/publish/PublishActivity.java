@@ -14,7 +14,7 @@ public class PublishActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_publish);
+        setContentView(R.layout.activity_layout_publish);
         Log.e("Tag", "PublishActivity");
     }
 }

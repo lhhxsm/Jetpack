@@ -18,6 +18,4 @@
     <color name="color_divider">#f2f2f2</color>
     <color name="black">#000000</color>
     <color name="transparent">@android:color/transparent</color>
-    <!-- 底部导航中间按钮颜色   -->
-    <color name="tabs_publish_color">#FF678F</color>
 </resources>
