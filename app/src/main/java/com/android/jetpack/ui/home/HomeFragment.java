@@ -33,7 +33,7 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
     @Override
     public PagedListAdapter<Feed, RecyclerView.ViewHolder> getAdapter() {
         String feedType = getArguments() == null ? "all" : getArguments().getString("feedType");
-        return new FeedAdapter(getContext(),feedType);
+        return new FeedAdapter(getContext(), feedType);
     }
 
     @Override

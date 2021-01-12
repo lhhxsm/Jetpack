@@ -1,6 +1,5 @@
 package com.android.jetpack.ui.home;
 
-import android.os.UserManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -24,7 +23,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HomeViewModel extends AbsViewModel<Feed> {
     private static final String TAG = HomeViewModel.class.getSimpleName();
+    private final MutableLiveData<PagedList<Feed>> cacheLiveData = new MutableLiveData<>();
+    private final AtomicBoolean loadAfter = new AtomicBoolean(false);
     private volatile boolean witchCache = true;
+    private String mFeedType;
     ItemKeyedDataSource<Integer, Feed> mDataSource = new ItemKeyedDataSource<Integer, Feed>() {
         @Override
         public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Feed> callback) {
@@ -53,9 +55,6 @@ public class HomeViewModel extends AbsViewModel<Feed> {
             return item.id;
         }
     };
-    private final MutableLiveData<PagedList<Feed>> cacheLiveData = new MutableLiveData<>();
-    private final AtomicBoolean loadAfter = new AtomicBoolean(false);
-    private String mFeedType;
 
     @Override
     public DataSource createDataSource() {
@@ -88,7 +87,7 @@ public class HomeViewModel extends AbsViewModel<Feed> {
             request.execute(new JsonCallback<List<Feed>>() {
                 @Override
                 public void onCacheSuccess(ApiResponse<List<Feed>> response) {
-                    Log.e(TAG, "onCacheSuccess: "+response.body);
+                    Log.e(TAG, "onCacheSuccess: " + response.body);
 //                    MutablePageKeyedDataSource dataSource = new MutablePageKeyedDataSource<Feed>();
 //                    dataSource.data.addAll(response.body);
 //

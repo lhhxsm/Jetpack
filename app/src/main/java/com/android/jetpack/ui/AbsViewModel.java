@@ -13,40 +13,18 @@ public abstract class AbsViewModel<T> extends ViewModel {
 
     protected PagedList.Config config;
     private DataSource dataSource;
+    DataSource.Factory factory = new DataSource.Factory() {
+        @NonNull
+        @Override
+        public DataSource create() {
+            if (dataSource == null || dataSource.isInvalid()) {
+                dataSource = createDataSource();
+            }
+            return dataSource;
+        }
+    };
     private LiveData<PagedList<T>> pageData;
-
     private MutableLiveData<Boolean> boundaryPageData = new MutableLiveData<>();
-
-    public AbsViewModel() {
-
-        config = new PagedList.Config.Builder()
-                .setPageSize(10)
-                .setInitialLoadSizeHint(12)
-                // .setMaxSize(100)；
-                // .setEnablePlaceholders(false)
-                // .setPrefetchDistance()
-                .build();
-
-        pageData = new LivePagedListBuilder(factory, config)
-                .setInitialLoadKey(0)
-                //.setFetchExecutor()
-                .setBoundaryCallback(callback)
-                .build();
-    }
-
-
-    public LiveData<PagedList<T>> getPageData() {
-        return pageData;
-    }
-
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-
-    public LiveData<Boolean> getBoundaryPageData() {
-        return boundaryPageData;
-    }
-
     //PagedList数据被加载 情况的边界回调callback
     //但 不是每一次分页 都会回调这里，具体请看 ContiguousPagedList#mReceiver#onPageResult
     //deferBoundaryCallbacks
@@ -69,16 +47,34 @@ public abstract class AbsViewModel<T> extends ViewModel {
         }
     };
 
-    DataSource.Factory factory = new DataSource.Factory() {
-        @NonNull
-        @Override
-        public DataSource create() {
-            if (dataSource == null || dataSource.isInvalid()) {
-                dataSource = createDataSource();
-            }
-            return dataSource;
-        }
-    };
+    public AbsViewModel() {
+
+        config = new PagedList.Config.Builder()
+                .setPageSize(10)
+                .setInitialLoadSizeHint(12)
+                // .setMaxSize(100)；
+                // .setEnablePlaceholders(false)
+                // .setPrefetchDistance()
+                .build();
+
+        pageData = new LivePagedListBuilder(factory, config)
+                .setInitialLoadKey(0)
+                //.setFetchExecutor()
+                .setBoundaryCallback(callback)
+                .build();
+    }
+
+    public LiveData<PagedList<T>> getPageData() {
+        return pageData;
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public LiveData<Boolean> getBoundaryPageData() {
+        return boundaryPageData;
+    }
 
     public abstract DataSource createDataSource();
 

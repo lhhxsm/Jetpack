@@ -29,6 +29,12 @@ public class PageListPlayDetector {
             autoPlay();
         }
     };
+    private final RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver() {
+        @Override
+        public void onItemRangeInserted(int positionStart, int itemCount) {
+            postAutoPlay();
+        }
+    };
     RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -52,12 +58,6 @@ public class PageListPlayDetector {
                     playingTarget.inActive();
                 }
             }
-        }
-    };
-    private final RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver() {
-        @Override
-        public void onItemRangeInserted(int positionStart, int itemCount) {
-            postAutoPlay();
         }
     };
 
